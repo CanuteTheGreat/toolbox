@@ -1,0 +1,4 @@
+#!/bin/bash
+
+echo -e "\n\n\nThese are the currently supported versions of PostgreSQL:" ; wget -q -O - https://www.postgresql.org/versions.rss | sed '/unsupported/,$d' | sed '$ d' | grep -v versions | grep link | sed 's/.*<description>//'
+
