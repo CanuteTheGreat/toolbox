@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# nfw == not feeling well
+
+# Basic structure:
+# $salutation
+# $what
+# $sorry
+# $updates
+
+salutation=("Hi" "Hello" "Hey")
+what=("I'm not feeling well" "I'm not feeling super great" "I had a rough night with the kid" "I feel like crap" "I don't feel good")
+sorry=("I'm sorry if that causes problems" "I appologize if this makes it difficult" "I hope this doesn't cause any issues")
+updates=("I'll try to check in later" "I will see how I feel later and try for a half-day" "Hopefully I feel better and can get something done later")
+
+echo -e ${salutation[ $(( RANDOM % ${#salutation[@]} )) ]},\\n\\n${what[ $(( RANDOM % ${#what[@]} )) ]}. ${sorry[ $(( RANDOM % ${#sorry[@]} )) ]}. ${updates[ $(( RANDOM % ${#updates[@]} )) ]}.
+
