@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Version
-version=0.05
+version=0.06
 
 # A simple script that checks for connectivity (including working DNS resolution)
 # If no connectivity, reset tethering
@@ -21,22 +21,26 @@ CHECKWWW=www.google.com
 SLEEPITOFF=60
 
 while true; do
-	lsusb | grep $TETHERDEV > /dev/null  
-	if (( $? )); then
-		echo "Tethering device not found! Sleeping..."
-		sleep 5s
-	else
-		echo "Tethering device present, continuing"
-		break
-	fi
-done
+	while true; do
+		# look for USB device
+		lsusb | grep $TETHERDEV > /dev/null 
 
-while true; do
+		# make sure there is a device connected before continuing
+		if (( $? )); then
+			echo "Tethering device not found! Sleeping 5s..."
+			sleep 5s
+		else
+			echo "Tethering device present, continuing with network check..."
+			break
+		fi
+	done
+
+	# command to check for connectivity
 	curl --connect-timeout 10 $CHECKWWW > /dev/null 2>&1
 
 	if [ $? != 0 ]; then
 		# No internet
-		echo "Network down, Houston we have a problem!" # FIXME: For debugging
+		echo "Network down, resetting USB and restarting easytether!" 
 		# Reset the USB device
 		usbreset $TETHERDEV 
 		# Wait a few seconds for device to be ready again
@@ -45,8 +49,9 @@ while true; do
 		easytether-usb 
 	else
 		# Internet working
-		echo "Network up, all good in the hood!" # FIXME: For debugging
+		echo "Network up!" 
 	fi
+	echo "Sleeping $SLEEPITOFF before rechecking"
 	sleep $SLEEPITOFF
 done
 
