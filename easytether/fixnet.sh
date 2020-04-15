@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Version
-version=0.06
+version=0.07
 
 # A simple script that checks for connectivity (including working DNS resolution)
 # If no connectivity, reset tethering
@@ -26,7 +26,7 @@ while true; do
 		lsusb | grep $TETHERDEV > /dev/null 
 
 		# make sure there is a device connected before continuing
-		if (( $? )); then
+		if [ $? == 1 ]; then
 			echo "Tethering device not found! Sleeping 5s..."
 			sleep 5s
 		else
